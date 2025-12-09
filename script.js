@@ -698,8 +698,7 @@ const loadCalendar = async () => {
     clearTimeout(timer);
     console.warn('Calendar load failed', err);
     if (upcomingStatus) {
-      upcomingStatus.innerHTML =
-        `Calendar shown below (direct embed). If empty, <a class="link" href="${CALENDAR_EMBED_URL}" target="_blank" rel="noreferrer">open calendar</a>.`;
+      upcomingStatus.textContent = 'Calendar shown below (direct embed).';
     }
     if (upcomingEmbed && upcomingEmbedWrap) {
       upcomingEmbed.src = CALENDAR_EMBED_URL;
