@@ -83,10 +83,10 @@ const filterDestination = document.getElementById('filterDestination');
 const form = document.getElementById('rideForm');
 const departureDaySelect = document.getElementById('departureDay');
 const departureTimeInput = document.getElementById('departureTime');
+const driverCodeInput = document.getElementById('driverCode');
 const requestForm = document.getElementById('requestForm');
 const requestPickup = document.getElementById('reqPickup');
 const requestDestination = document.getElementById('reqDestination');
-const requestDriver = document.getElementById('reqDriver');
 const requestCustomWrap = document.getElementById('customPickupWrap');
 const requestCustom = document.getElementById('reqCustom');
 const requestList = document.getElementById('requestList');
@@ -137,6 +137,7 @@ const defaultRides = [
     notes: 'Room for 3 oars; text when outside.',
     passengers: [{ name: 'Calder Fritz' }],
     requests: [],
+    driverCode: '1111',
   },
   {
     id: 'seed-2',
@@ -150,6 +151,7 @@ const defaultRides = [
     notes: 'Drop at Bartels side door.',
     passengers: [{ name: 'Sebastian El Hadj' }],
     requests: [],
+    driverCode: '2222',
   },
   {
     id: 'seed-3',
@@ -163,6 +165,7 @@ const defaultRides = [
     notes: 'North loop pickup, no roof racks today.',
     passengers: [],
     requests: [],
+    driverCode: '3333',
   },
 ];
 
@@ -369,14 +372,6 @@ const renderSelects = () => {
     <option value="all">All</option>
     ${destinations.map((d) => `<option value="${d.id}">${d.name}</option>`).join('')}
   `;
-
-  const driverOptions = rides
-    .map(
-      (r) =>
-        `<option value="${r.id}">${r.driver} — ${destinations.find((d) => d.id === r.destinationId)?.name || 'Destination'}</option>`,
-    )
-    .join('');
-  requestDriver.innerHTML = `<option value="">Select driver/ride</option>${driverOptions}`;
 };
 
 const renderRides = () => {
@@ -400,7 +395,6 @@ const renderRides = () => {
       const passengerList = r.passengers && r.passengers.length
         ? r.passengers.map((p) => p.name).join(', ')
         : 'No passengers yet';
-      const pending = r.requests && r.requests.length ? r.requests : [];
 
       return `
         <article class="ride" data-ride="${r.id}">
@@ -415,28 +409,6 @@ const renderRides = () => {
             <span><strong>Vehicle:</strong> ${r.vehicle || 'Not specified'}</span>
             <span class="subtle">${r.notes || ''}</span>
           </div>
-          ${
-            pending.length
-              ? `<div class="requests">
-                  <strong>Pickup requests</strong>
-                  ${pending
-                    .map(
-                      (req) => `
-                        <div class="request-card" data-request="${req.id}">
-                          <div><strong>${req.name}</strong> • ${req.contact}</div>
-                          <div>${req.pickupLabel} → ${req.destinationLabel}</div>
-                          <div class="subtle">${formatTime(req.time)}</div>
-                          <div class="join">
-                            <button class="btn primary approve-request" data-request="${req.id}" data-ride="${r.id}">Approve</button>
-                            <button class="btn ghost decline-request" data-request="${req.id}" data-ride="${r.id}">Decline</button>
-                          </div>
-                        </div>
-                      `,
-                    )
-                    .join('')}
-                </div>`
-              : ''
-          }
           <div class="ride__footer">
             <div class="passengers">
               <strong>Passengers</strong>
@@ -457,12 +429,13 @@ const renderRides = () => {
 
 const renderRequests = () => {
   if (!requestList) return;
-  if (!requests.length) {
+  const open = requests.filter((req) => !req.assignedRideId);
+  if (!open.length) {
     requestList.innerHTML = '<p class="subtle">No pending custom requests.</p>';
     return;
   }
 
-  requestList.innerHTML = requests
+  requestList.innerHTML = open
     .map(
       (req) => `
       <div class="request-card" data-request="${req.id}">
@@ -470,6 +443,7 @@ const renderRequests = () => {
         <div>${req.pickupLabel} → ${req.destinationLabel}</div>
         <div class="subtle">${formatTime(req.time)}</div>
         <div class="subtle">${req.details || ''}</div>
+        <div class="subtle">Any driver may accept this request.</div>
       </div>
     `,
     )
@@ -492,8 +466,9 @@ form.addEventListener('submit', (e) => {
   const seats = Number(document.getElementById('seats').value) || 1;
   const vehicle = document.getElementById('vehicle').value.trim();
   const notes = document.getElementById('notes').value.trim();
+  const driverCode = driverCodeInput.value.trim();
 
-  if (!driver || !contact || !day || !time) return;
+  if (!driver || !contact || !day || !time || !driverCode) return;
 
   const departure = buildDateTime(day, time);
 
@@ -509,6 +484,7 @@ form.addEventListener('submit', (e) => {
     notes,
     passengers: [],
     requests: [],
+    driverCode,
   };
 
   rides.push(newRide);
@@ -517,6 +493,34 @@ form.addEventListener('submit', (e) => {
   resetForm();
   renderSelects();
 });
+
+const claimRequestForRide = (rideId, reqId) => {
+  const ride = rides.find((r) => r.id === rideId);
+  const reqIndex = requests.findIndex((r) => r.id === reqId && !r.assignedRideId);
+  if (!ride || reqIndex === -1) return;
+
+  const seatsLeft = Math.max(ride.seats - (ride.passengers?.length || 0), 0);
+  if (seatsLeft <= 0) {
+    alert('This ride is full; cannot accept another request.');
+    return;
+  }
+
+  const entered = window.prompt('Driver approval code:');
+  if (!entered || entered.trim() !== (ride.driverCode || '').trim()) {
+    alert('Approval code incorrect.');
+    return;
+  }
+
+  const req = requests[reqIndex];
+  ride.passengers = ride.passengers || [];
+  ride.passengers.push({ name: req.name });
+  requests[reqIndex].assignedRideId = ride.id;
+
+  saveRides();
+  saveRequests();
+  renderRides();
+  renderRequests();
+};
 
 rideListEl.addEventListener('submit', (e) => {
   if (!e.target.classList.contains('join-form')) return;
@@ -544,35 +548,11 @@ rideListEl.addEventListener('submit', (e) => {
 });
 
 rideListEl.addEventListener('click', (e) => {
-  const approveBtn = e.target.closest('.approve-request');
-  const declineBtn = e.target.closest('.decline-request');
-  if (!approveBtn && !declineBtn) return;
-
-  const rideId = (approveBtn || declineBtn).getAttribute('data-ride');
-  const reqId = (approveBtn || declineBtn).getAttribute('data-request');
-  const ride = rides.find((r) => r.id === rideId);
-  if (!ride) return;
-
-  const reqIndex = ride.requests?.findIndex((r) => r.id === reqId);
-  const req = reqIndex >= 0 ? ride.requests[reqIndex] : null;
-
-  if (approveBtn && req) {
-    const seatsLeft = Math.max(ride.seats - (ride.passengers?.length || 0), 0);
-    if (seatsLeft <= 0) {
-      alert('This ride is full; cannot approve.');
-    } else {
-      ride.passengers = ride.passengers || [];
-      ride.passengers.push({ name: req.name });
-      ride.requests.splice(reqIndex, 1);
-    }
-  }
-
-  if (declineBtn && reqIndex >= 0) {
-    ride.requests.splice(reqIndex, 1);
-  }
-
-  saveRides();
-  renderRides();
+  const claimBtn = e.target.closest('.claim-request');
+  if (!claimBtn) return;
+  const rideId = claimBtn.getAttribute('data-ride');
+  const reqId = claimBtn.getAttribute('data-request');
+  claimRequestForRide(rideId, reqId);
 });
 
 requestPickup.addEventListener('change', () => {
@@ -587,10 +567,9 @@ requestForm.addEventListener('submit', (e) => {
   const destinationId = requestDestination.value;
   const day = requestDay.value;
   const timePlain = requestTimePlain.value;
-  const driverRideId = requestDriver.value;
   const details = requestCustom.value.trim();
 
-  if (!name || !contact || !day || !timePlain || !driverRideId) return;
+  if (!name || !contact || !day || !timePlain) return;
 
   const time = buildDateTime(day, timePlain);
 
@@ -611,22 +590,13 @@ requestForm.addEventListener('submit', (e) => {
     destinationLabel,
     time,
     details,
-    driverRideId,
+    assignedRideId: null,
   };
 
-  const ride = rides.find((r) => r.id === driverRideId);
-  if (!ride) {
-    alert('Select a ride/driver to notify.');
-    return;
-  }
-
-  ride.requests = ride.requests || [];
-  ride.requests.push(request);
   requests.push(request);
 
   saveRides();
   saveRequests();
-  renderRides();
   renderRequests();
   requestForm.reset();
   requestCustomWrap.style.display = 'none';

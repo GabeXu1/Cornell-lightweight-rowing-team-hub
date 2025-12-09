@@ -179,6 +179,12 @@
             <input type="text" id="vehicle" placeholder="SUV, room for oars">
           </label>
         </div>
+        <div class="field">
+          <label>
+            Driver approval code (required to accept requests)
+            <input type="password" id="driverCode" placeholder="Set a 4+ digit/code" minlength="4" required>
+          </label>
+        </div>
         <label class="field">
           Special instructions
           <textarea id="notes" rows="2" placeholder="Bring ID for Teagle; grab coffee at Terrace."></textarea>
@@ -192,7 +198,7 @@
         <div>
           <p class="eyebrow">Passengers</p>
           <h2>Request a Pickup</h2>
-          <p class="subtle">Choose RPCC or Bartels, or specify a custom pickup. Requests are routed to a driver.</p>
+          <p class="subtle">Choose RPCC or Bartels, or specify a custom pickup. Requests will be available for any driver to accept.</p>
         </div>
       </div>
       <form id="requestForm" class="form">
@@ -237,12 +243,6 @@
         <label class="field" id="customPickupWrap" style="display:none">
           Custom pickup details
           <textarea id="reqCustom" rows="2" placeholder="Address or landmark near campus"></textarea>
-        </label>
-        <label class="field">
-          Driver to notify (must have an active ride posted)
-          <select id="reqDriver" required>
-            <option value="">Select driver/ride</option>
-          </select>
         </label>
         <button class="btn primary" type="submit">Send request</button>
       </form>
