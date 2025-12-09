@@ -1,0 +1,504 @@
+/* Cornell Lightweight Rowing Carpool styles */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: #0f172a;
+  background: #f8fafc;
+  line-height: 1.6;
+}
+
+:root {
+  --carnelian: #b31b1b;
+  --carnelian-dark: #8e1414;
+  --ink: #0f172a;
+  --muted: #475569;
+  --border: #e2e8f0;
+  --surface: #ffffff;
+}
+
+h1, h2, h3 {
+  margin: 0 0 8px;
+  color: var(--ink);
+}
+
+p {
+  margin: 0;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  color: var(--carnelian);
+  margin-bottom: 6px;
+}
+
+.lede {
+  font-size: 1.1rem;
+  color: #1f2937;
+  max-width: 640px;
+}
+
+.subtle {
+  color: var(--muted);
+}
+
+.hero {
+  display: grid;
+  gap: 20px;
+  padding: 48px 6vw 32px;
+  background: radial-gradient(circle at 20% 20%, #ffe5e5, #fff),
+              linear-gradient(120deg, #fff, #fef2f2 60%, #fff);
+  border-bottom: 1px solid var(--border);
+}
+
+.hero__content {
+  max-width: 760px;
+}
+
+.hero__actions {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0 8px;
+  flex-wrap: wrap;
+}
+
+.hero__card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  max-width: 420px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+}
+
+.hero__card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.hero__card .link {
+  color: var(--carnelian);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.hero__card .link:hover {
+  text-decoration: underline;
+}
+
+.calendar-embed {
+  margin-top: 10px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.calendar-embed iframe {
+  width: 100%;
+  height: 360px;
+  border: 0;
+  background: #f8fafc;
+}
+
+.hero__card h3 {
+  margin-bottom: 10px;
+}
+
+.hero__card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px;
+  display: grid;
+  gap: 8px;
+}
+
+.hero__card li {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 8px;
+  color: var(--muted);
+}
+
+.hero__card li span {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.note {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.linkout {
+  margin-top: 8px;
+  color: var(--muted);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-weight: 700;
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: all 0.16s ease;
+}
+
+.btn.primary {
+  background: var(--carnelian);
+  color: #fff;
+}
+
+.btn.primary:hover {
+  background: var(--carnelian-dark);
+  transform: translateY(-1px);
+}
+
+.btn.ghost {
+  background: #fff;
+  color: var(--ink);
+  border-color: var(--border);
+}
+
+.btn.ghost:hover {
+  border-color: var(--carnelian);
+}
+
+.layout {
+  padding: 28px 6vw 56px;
+  display: grid;
+  gap: 20px;
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+}
+
+.schedule-block {
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  white-space: pre-wrap;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: var(--ink);
+  line-height: 1.55;
+}
+
+.schedule-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.schedule-day {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  background: #f8fafc;
+}
+
+.schedule-day h4 {
+  margin: 0 0 6px;
+}
+
+.schedule-day ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+}
+
+.schedule-day li strong {
+  color: var(--ink);
+}
+
+.map-wrap {
+  display: grid;
+  gap: 10px;
+}
+
+#map {
+  width: 100%;
+  height: 360px;
+  min-height: 320px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  position: relative;
+  background: #f1f5f9;
+}
+
+.map-legend {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.panel__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.legend, .filters {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.chip {
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  background: #f8fafc;
+}
+
+.chip.boathouse {
+  border-color: #0ea5e9;
+  color: #0ea5e9;
+}
+
+.chip.event {
+  border-color: #7c3aed;
+  color: #7c3aed;
+}
+
+.chip.flexible {
+  border-color: #10b981;
+  color: #0f9f75;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+.hotspot {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  background: #fff;
+  display: grid;
+  gap: 8px;
+  transition: border-color 0.12s ease, transform 0.12s ease;
+}
+
+.hotspot:hover {
+  border-color: var(--carnelian);
+  transform: translateY(-1px);
+}
+
+.hotspot__title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.hotspot__title h4 {
+  margin: 0;
+}
+
+.tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.form {
+  display: grid;
+  gap: 14px;
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+}
+
+.field.two {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.field.three {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+label {
+  font-weight: 600;
+  color: var(--ink);
+  font-size: 0.95rem;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #f8fafc;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.12s ease, background 0.12s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--carnelian);
+  background: #fff;
+}
+
+.list {
+  display: grid;
+  gap: 12px;
+}
+
+.ride {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+  display: grid;
+  gap: 10px;
+  background: #fff;
+  transition: border-color 0.12s ease, transform 0.12s ease;
+}
+
+.ride:hover {
+  border-color: var(--carnelian);
+  transform: translateY(-1px);
+}
+
+.ride__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.pill {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  font-weight: 700;
+}
+
+.pill.boathouse {
+  background: #e0f2fe;
+  color: #0369a1;
+  border-color: #bae6fd;
+}
+
+.pill.event {
+  background: #ede9fe;
+  color: #6b21a8;
+  border-color: #ddd6fe;
+}
+
+.pill.flexible {
+  background: #ecfdf3;
+  color: #0f9f75;
+  border-color: #bbf7d0;
+}
+
+.meta {
+  display: grid;
+  gap: 4px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.meta strong {
+  color: var(--ink);
+}
+
+.ride__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.requests {
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+}
+
+.request-card {
+  border: 1px dashed var(--border);
+  padding: 10px;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+.map-status {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(248,250,252,0.9));
+  color: var(--muted);
+  font-weight: 600;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.passengers {
+  display: grid;
+  gap: 4px;
+  color: var(--muted);
+}
+
+.join {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.join input {
+  max-width: 200px;
+}
+
+.footer {
+  padding: 18px 6vw 36px;
+  color: var(--muted);
+  text-align: center;
+}
+
+@media (min-width: 960px) {
+  .hero {
+    grid-template-columns: 1.1fr 0.9fr;
+    align-items: center;
+  }
+}
+

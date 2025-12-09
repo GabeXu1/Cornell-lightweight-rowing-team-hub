@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cornell Lightweight Rowing Carpool</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="hero">
+    <div class="hero__content">
+      <p class="eyebrow">Cornell Lightweight Rowing</p>
+      <h1>Team Carpool Hub</h1>
+      <p class="lede">
+        Coordinate rides from campus hotspots to the Ithaca boathouse or events.
+        Drivers volunteer seats, teammates hop in, everyone arrives on time.
+      </p>
+      <div class="hero__actions">
+        <a class="btn primary" href="#create">Offer a Ride</a>
+        <a class="btn ghost" href="#rides">Find a Ride</a>
+      </div>
+      <p class="linkout">
+        Team roster for context:
+        <a href="https://cornellbigred.com/sports/mens-rowing/roster" target="_blank" rel="noreferrer">
+          Cornell Big Red Lightweight Rowing
+        </a>
+      </p>
+    </div>
+    <div class="hero__card">
+      <div class="hero__card-header">
+        <h3>Upcoming events</h3>
+          <a class="link" href="https://calendar.google.com/calendar/embed?src=c_18b53fc5a9d59e1675d3c42efe0fba3e5d486839427f42af4a0dd5c4638632eb%40group.calendar.google.com&ctz=America%2FNew_York" target="_blank" rel="noreferrer">Open calendar</a>
+      </div>
+      <div id="upcomingStatus" class="note">Loading calendar…</div>
+      <ul id="upcomingList"></ul>
+        <div id="upcomingEmbedWrap" class="calendar-embed" style="display:none">
+          <iframe
+            id="upcomingEmbed"
+            src=""
+            title="Team calendar"
+            loading="lazy"
+            referrerpolicy="no-referrer"
+            allowfullscreen
+          ></iframe>
+        </div>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section id="map-section" class="panel">
+      <div class="panel__header">
+        <div>
+          <p class="eyebrow">Campus map</p>
+          <h2>Hotspots and destinations</h2>
+          <p class="subtle">RPCC and Bartels for pickup; Boathouse and Teagle for drop-off. Add a custom pickup request and notify a driver.</p>
+        </div>
+      </div>
+      <div class="map-wrap">
+        <div id="map">
+          <div id="mapStatus" class="map-status subtle">Loading map tiles…</div>
+        </div>
+        <div class="map-legend">
+          <span class="chip boathouse">Boathouse / Teagle</span>
+          <span class="chip event">Pickup (RPCC / Bartels)</span>
+          <span class="chip flexible">Custom request</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="schedule" class="panel">
+      <div class="panel__header">
+        <div>
+          <p class="eyebrow">This week</p>
+          <h2>Weekly schedule</h2>
+        </div>
+      </div>
+      <div class="schedule-grid">
+        <div class="schedule-day">
+          <h4>Monday</h4>
+          <ul>
+            <li><strong>AM</strong> — BH 6:30 meet, row 15k</li>
+            <li><strong>PM</strong> — BH 4:50 meet, erg 4×10/6' off or 5k</li>
+          </ul>
+        </div>
+        <div class="schedule-day">
+          <h4>Tuesday</h4>
+          <ul>
+            <li><strong>AM</strong> — OYO 60' erg</li>
+            <li><strong>PM</strong> — BH 4:50 meet, row 20k</li>
+          </ul>
+        </div>
+        <div class="schedule-day">
+          <h4>Wednesday</h4>
+          <ul>
+            <li><strong>AM</strong> — BH 6:30 meet, row 5×1500</li>
+            <li><strong>PM</strong> — BH 4:50 meet, lift & 2×20 erg</li>
+          </ul>
+        </div>
+        <div class="schedule-day">
+          <h4>Thursday</h4>
+          <ul>
+            <li><strong>AM</strong> — Off</li>
+            <li><strong>PM</strong> — BH 4:50 meet, row 15k</li>
+          </ul>
+        </div>
+        <div class="schedule-day">
+          <h4>Friday</h4>
+          <ul>
+            <li><strong>AM</strong> — BH 6:50 meet, row 15k</li>
+            <li><strong>PM</strong> — BH 4:50 meet, row + cramps</li>
+          </ul>
+        </div>
+        <div class="schedule-day">
+          <h4>Saturday</h4>
+          <ul>
+            <li><strong>AM</strong> — BH 7:30 door, Schwartz Cup + Bay dedication</li>
+            <li><strong>PM</strong> — —</li>
+          </ul>
+        </div>
+        <div class="schedule-day">
+          <h4>Sunday</h4>
+          <ul>
+            <li><strong>All day</strong> — Off</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="create" class="panel">
+      <div class="panel__header">
+        <div>
+          <p class="eyebrow">Drivers</p>
+          <h2>Offer a ride</h2>
+          <p class="subtle">Share seats, pickup spot, and departure time.</p>
+        </div>
+      </div>
+      <form id="rideForm" class="form">
+        <div class="field two">
+          <label>
+            Driver name
+            <input type="text" id="driverName" placeholder="Alex Califano" required>
+          </label>
+          <label>
+            Contact (cell for text)
+            <input type="text" id="driverContact" placeholder="607-555-0101" required>
+          </label>
+        </div>
+        <div class="field two">
+          <label>
+            Pickup hotspot
+            <select id="pickupHotspot" required></select>
+          </label>
+          <label>
+            Destination
+            <select id="destination" required></select>
+          </label>
+        </div>
+        <div class="field three">
+          <label>
+            Day
+            <select id="departureDay" required>
+              <option value="today">Today</option>
+              <option value="tomorrow">Tomorrow</option>
+            </select>
+          </label>
+          <label>
+            Time
+            <input type="time" id="departureTime" required>
+          </label>
+          <label>
+            Seats available
+            <input type="number" id="seats" min="1" max="8" value="3" required>
+          </label>
+          <label>
+            Vehicle / notes
+            <input type="text" id="vehicle" placeholder="SUV, room for oars">
+          </label>
+        </div>
+        <label class="field">
+          Special instructions
+          <textarea id="notes" rows="2" placeholder="Bring ID for Teagle; grab coffee at Terrace."></textarea>
+        </label>
+        <button class="btn primary" type="submit">Post ride</button>
+      </form>
+    </section>
+
+    <section id="request" class="panel">
+      <div class="panel__header">
+        <div>
+          <p class="eyebrow">Passengers</p>
+          <h2>Request a pickup</h2>
+          <p class="subtle">Choose RPCC or Bartels, or specify a custom pickup. Requests are routed to a driver.</p>
+        </div>
+      </div>
+      <form id="requestForm" class="form">
+        <div class="field two">
+          <label>
+            Your name
+            <input type="text" id="reqName" placeholder="Your name" required>
+          </label>
+          <label>
+            Contact (cell for text)
+            <input type="text" id="reqContact" placeholder="607-555-0123" required>
+          </label>
+        </div>
+        <div class="field three">
+          <label>
+            Pickup
+            <select id="reqPickup" required>
+              <option value="rpcc">RPCC (North Campus)</option>
+              <option value="bartels">Bartels Hall Loop</option>
+              <option value="custom">Custom location</option>
+            </select>
+          </label>
+          <label>
+            Destination
+            <select id="reqDestination" required>
+              <option value="boathouse">Boathouse</option>
+              <option value="teagle">Teagle</option>
+            </select>
+          </label>
+          <label>
+            Day
+            <select id="reqDay" required>
+              <option value="today">Today</option>
+              <option value="tomorrow">Tomorrow</option>
+            </select>
+          </label>
+          <label>
+            Time
+            <input type="time" id="reqTimePlain" required>
+          </label>
+        </div>
+        <label class="field" id="customPickupWrap" style="display:none">
+          Custom pickup details
+          <textarea id="reqCustom" rows="2" placeholder="Address or landmark near campus"></textarea>
+        </label>
+        <label class="field">
+          Driver to notify (must have an active ride posted)
+          <select id="reqDriver" required>
+            <option value="">Select driver/ride</option>
+          </select>
+        </label>
+        <button class="btn primary" type="submit">Send request</button>
+      </form>
+      <div id="requestList" class="list"></div>
+    </section>
+
+    <section id="rides" class="panel">
+      <div class="panel__header">
+        <div>
+          <p class="eyebrow">Passengers</p>
+          <h2>Active rides</h2>
+          <p class="subtle">Sorted soonest first. Join with your name and we’ll update seats.</p>
+        </div>
+        <div class="filters">
+          <label>
+            Filter by destination
+            <select id="filterDestination">
+              <option value="all">All</option>
+            </select>
+          </label>
+        </div>
+      </div>
+      <div id="rideList" class="list"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Built for Cornell Lightweight Rowing to keep rides simple and on time.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
